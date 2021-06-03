@@ -3,9 +3,20 @@ description: |
   Experimenting...
 author: ZpqrtBnk <sgay@pilotine.com>
 
+inputs:
+  mode:
+    description: Some Description
+    required: false
+    default: miss
+    
 runs:
-  shell: bash
-  run: echo "Hello from Experiment"
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        echo "Hello from Experiment + ${{ inputs.mode }}"
+        echo "::warning::A Warning Message"
+      
 branding:
   color: blue
   icon: file-text
