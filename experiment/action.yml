@@ -1,0 +1,11 @@
+name: Experiment
+description: |
+  Experimenting...
+author: ZpqrtBnk <sgay@pilotine.com>
+
+runs:
+  shell: bash
+  run: echo "Hello from Experiment"
+branding:
+  color: blue
+  icon: file-text
