@@ -1,0 +1,12 @@
+name: 'Annotate'
+description: 'Annotates'
+inputs:
+  githubToken:
+    description: "GitHub token for use when authenticating with API"
+    required: true
+  text:
+    description: "Annotation text"
+    required: true
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
