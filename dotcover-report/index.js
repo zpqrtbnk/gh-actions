@@ -56,7 +56,7 @@ async function run() {
         }
     }
     catch (error) {
-        summary = `Failed: ${error.Message}`;
+        summary = `Failed: ${error.message}`;
     }
     
     var annotations = [];
@@ -84,7 +84,7 @@ async function run() {
         output: { 
             title: `Test Coverage`, 
             summary: summary, 
-            text: 'where would that text go?',
+            //text: 'where would that text go?',
             annotations
         }
     });
