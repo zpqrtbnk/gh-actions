@@ -49,13 +49,7 @@ async function run() {
         const dirs = await fs.readdir(fpath);
         for (const dir of dirs) {
             const content = await fs.readFile(`${fpath}/${dir}/cover.json`, 'utf8');
-            try {
-                
-            }
-            catch (error) {
-                core.error(content);
-                throw(error);
-            }
+            core.warning(content);
             const report = JSON.parse(content);
             const target = dir.substr('cover-'.length);
             const percent = report.CoveragePercent;
