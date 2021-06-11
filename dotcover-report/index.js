@@ -49,8 +49,8 @@ async function run() {
         const dirs = await fs.readdir(fpath);
         for (const dir of dirs) {
             const content = await fs.readFile(`${fpath}/${dir}/cover.json`, 'utf8');
-            core.warning(content);
-            const report = JSON.parse(content);
+            const p = content.indexOf('{');
+            const report = JSON.parse(content.substring(p));
             const target = dir.substr('cover-'.length);
             const percent = report.CoveragePercent;
             summary += `\n* ${target}: ${percent}%`;
@@ -68,8 +68,8 @@ async function run() {
             start_line: 1, // required - GitHub uses 1 when unknown
             end_line: 1, // required - same
             annotation_level: "failure", // notice, warning or failure
-            title: "Failed to process test coverage (title)",
-            message: "Failed to process test coverage (message)"
+            title: `Error in ${name}`,
+            message: `Error in ${name}`
             // raw_details (string)
         }];
     }
