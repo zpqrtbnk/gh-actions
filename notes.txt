@@ -1,0 +1,29 @@
+
+
+notes
+
+- follow this tutorial including ncc
+
+- upgrade to latest node by downloading it & installing it
+- upgrade to latest npm
+    rm -rf ~/AppData/Roaming/npm
+    npm cache clear --force
+    npm install -g npm@latest
+
+- from https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action
+
+  npm init -y
+  npm install @actions/core
+  npm install @actions/github
+  npm install -g @vercel/ncc
+
+  np action.yml
+  np index.js
+  np package.json
+    add script: "pack": "ncc build index.js -o dist"
+
+  mkdir dist
+  npm run pack    
+    
+- troubleshoot
+    define ACTIONS_STEP_DEBUG=true repository secret to see core.debug messages    

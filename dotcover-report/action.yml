@@ -1,0 +1,9 @@
+name: 'dotcover-report'
+description: 'Reports dotCover output.'
+inputs:
+  token:
+    description: "GitHub token for use when authenticating with API."
+    required: true
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
