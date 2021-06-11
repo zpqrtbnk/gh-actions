@@ -6174,12 +6174,12 @@ async function run() {
     core.info('Begin');
 
     // get inputs
-    //const ghtoken = core.getInput('token', { required: true });
+    const token = core.getInput('token', { required: true });
     const name = core.getInput('name', { required: true });
     const path = core.getInput('path', { required: true });
     
     // get the REST api
-    const octokit = github.getOctokit(ghtoken);
+    const octokit = github.getOctokit(token);
     const rest = octokit.rest;
     
     // get the context, the workflow...
