@@ -20,6 +20,7 @@ async function run() {
     // get the context, the workflow...
     const context = github.context;
     const workflow = context.workflow;
+    const repository = context.payload.repository;
     
     // get the ref 
     const ref = getSha(context);
@@ -31,8 +32,8 @@ async function run() {
     // create an in-progress check run
     const created = await rest.checks.create({
         // TODO: ...context.repository syntax?
-        owner: context.repository.owner.login,
-        repo: context.repository.name,
+        owner: repository.owner.login,
+        repo: repository.name,
         name: name,
         head_sha: ref,
         status: 'in_progress', // queued, in_progress, completed        
@@ -70,8 +71,8 @@ async function run() {
     
     // update the check run
     const r_update = await rest.checks.update({
-        owner: context.repository.owner.login,
-        repo: context.repository.name,
+        owner: repository.owner.login,
+        repo: repository.name,
         check_run_id: created.data.id,
         //name: 'can I change the name??',
         //head_sha: ref,
