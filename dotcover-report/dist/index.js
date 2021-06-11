@@ -6171,7 +6171,7 @@ async function run() {
     
   try {
 
-    core.Info('Begin');
+    core.info('Begin');
 
     // get inputs
     const ghtoken = core.getInput('token', { required: true });
