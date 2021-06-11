@@ -49,7 +49,7 @@ async function run() {
         const dirs = await fs.readdir(fpath, { withFileTypes: true});
         for (const dir of dirs) {
             if (!dir.isDirectory()) continue;
-            const content = await fs.readFile(`${fpath}/${dir}/cover.json`, 'utf-8');
+            const content = await fs.readFile(`${fpath}/${dir.name}/cover.json`, 'utf-8');
             const p = content.indexOf('{'); // trim weirdish leading chars
             const report = JSON.parse(content.substring(p));
             const target = dir.name.substr('cover-'.length);
