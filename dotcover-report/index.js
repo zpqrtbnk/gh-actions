@@ -17,7 +17,7 @@ async function run() {
     const octokit = github.getOctokit(token);
     const rest = octokit.rest;
     
-    // get the context, the workflow...
+    // get the context, the workflow, etc.
     const context = github.context;
     const workflow = context.workflow;
     const repository = context.payload.repository;
@@ -30,6 +30,7 @@ async function run() {
     }
     
     // create an in-progress check run
+    // TODO: could we have 1 run for both linux & windows?
     const created = await rest.checks.create({
         // TODO: ...context.repository syntax?
         owner: repository.owner.login,
@@ -39,10 +40,9 @@ async function run() {
         status: 'in_progress', // queued, in_progress, completed        
     });
     
-    // TODO: determine coverage
-    // TODO: group Linux & Windows in one check run?    
+    // gather values
     var failed = false;
-    var summary = 'Total test coverage:'; // TODO + linux/windows
+    var summary = `${name}:`;
     
     try {
         const fpath = process.cwd() + '/' + path;
@@ -56,12 +56,14 @@ async function run() {
             const percent = report.CoveragePercent;
             summary += `\n* ${target}: ${percent}%`;
         }
+        summary += '\n\nTo view the complete code coverage report, download the corresponding artifact.';
     }
     catch (error) {
         summary = `Failed: ${error.message}`;
         failed = true;
     }
     
+    // create failure annotation in case we failed
     var annotations = [];
     if (failed) {
         annotations = [{
@@ -93,7 +95,6 @@ async function run() {
     core.info('Completed.');
   }
   catch (error) {
-    //core.error(`Context: ${JSON.stringify(github.context, null, 2)}`)
     core.setFailed(error.message);
   }
 }
