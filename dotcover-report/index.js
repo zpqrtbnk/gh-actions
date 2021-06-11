@@ -46,12 +46,13 @@ async function run() {
     
     try {
         const fpath = process.cwd() + '/' + path;
-        const dirs = await fs.readdir(fpath);
+        const dirs = await fs.readdir(fpath, { withFileTypes: true});
         for (const dir of dirs) {
-            const content = await fs.readFile(`${fpath}/${dir}/cover.json`, 'utf8');
-            const p = content.indexOf('{');
+            if (!dir.isDirectory()) continue;
+            const content = await fs.readFile(`${fpath}/${dir}/cover.json`, 'utf-8');
+            const p = content.indexOf('{'); // trim weirdish leading chars
             const report = JSON.parse(content.substring(p));
-            const target = dir.substr('cover-'.length);
+            const target = dir.name.substr('cover-'.length);
             const percent = report.CoveragePercent;
             summary += `\n* ${target}: ${percent}%`;
         }
@@ -65,8 +66,8 @@ async function run() {
     if (failed) {
         annotations = [{
             path: ".github", // required - GitHub uses .github when unknown
-            start_line: 1, // required - GitHub uses 1 when unknown
-            end_line: 1, // required - same
+            start_line: 1,   // required - GitHub uses 1 when unknown
+            end_line: 1,     // same
             annotation_level: "failure", // notice, warning or failure
             title: `Error in ${name}`,
             message: `Error in ${name}`
@@ -79,14 +80,12 @@ async function run() {
         owner: repository.owner.login,
         repo: repository.name,
         check_run_id: created.data.id,
-        //name: 'can I change the name??',
-        //head_sha: ref,
         status: 'completed',
         conclusion: failed ? 'failure' : 'success', // success, failure, neutral, cancelled, timed_out, action_required, skipped
         output: { 
             title: `Test Coverage`, 
             summary: summary, 
-            //text: 'where would that text go?',
+            //text: '...details...',
             annotations
         }
     });
