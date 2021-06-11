@@ -8,7 +8,9 @@ async function run() {
     core.info('Begin');
 
     // get inputs
-    const ghtoken = core.getInput('token', { required: true });
+    //const ghtoken = core.getInput('token', { required: true });
+    const name = core.getInput('name', { required: true });
+    const path = core.getInput('path', { required: true });
     
     // get the REST api
     const octokit = github.getOctokit(ghtoken);
@@ -27,9 +29,10 @@ async function run() {
     
     // create an in-progress check run
     const created = await rest.checks.create({
-        owner: 'zpqrtbnk',
-        repo: 'test-repo',
-        name: 'Test Coverage',
+        // TODO: ...context.repository syntax?
+        owner: context.repository.owner.login,
+        repo: context.repository.name,
+        name: name,
         head_sha: ref,
         status: 'in_progress', // queued, in_progress, completed        
     });
@@ -55,8 +58,8 @@ async function run() {
     
     // update the check run
     const r_update = await rest.checks.update({
-        owner: 'zpqrtbnk',
-        repo: 'test-repo',
+        owner: context.repository.owner.login,
+        repo: context.repository.name,
         check_run_id: created.data.id,
         //name: 'can I change the name??',
         //head_sha: ref,

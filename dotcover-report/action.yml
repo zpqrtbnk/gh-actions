@@ -1,8 +1,11 @@
 name: 'dotcover-report'
 description: 'Reports dotCover output.'
 inputs:
-  token:
-    description: "GitHub token for use when authenticating with API."
+  name:
+    description: "The name of the check run."
+    required: true
+  path:
+    description: "The path of the test coverage output."
     required: true
 runs:
   using: 'node12'
