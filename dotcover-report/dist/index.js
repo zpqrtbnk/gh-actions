@@ -6166,6 +6166,7 @@ var __webpack_exports__ = {};
 (() => {
 const core = __nccwpck_require__(973);
 const github = __nccwpck_require__(803);
+const fs = __nccwpck_require__(747).promises;
 
 async function run() {
     
@@ -6204,10 +6205,21 @@ async function run() {
     });
     
     // TODO: determine coverage
-    //const reportPath = core.getInput('reportPath', { required: true });
-    //const checkRunNameEnvVar = core.getInput('checkRunNameEnvVar', { required: true });
-    //const checkRunNameVarPart = process.env[checkRunNameEnvVar];
+    // TODO: group Linux & Windows in one check run?    
     var failed = false;
+    var summary = 'Total test coverage:'; // TODO + linux/windows
+    
+    summary += `\n* example: 0%`;
+    
+    // path (temp/tests/cover) -> /cover-*
+    // each * is framework
+    // cover-*/cover.json -> percent
+    var filepath = path + '/cover-net462/cover.json';
+    var content = await fs.readFile(filepath, 'utf8');
+    var report = JSON.parse(reportContent);
+
+    const target = 'net462';
+    summary += `\n* ${target}: ${report.CoveragePercent}%`;
     
     var annotations = [];
     if (failed) {
@@ -6233,7 +6245,7 @@ async function run() {
         conclusion: 'neutral', // success, failure, neutral, cancelled, timed_out, action_required, skipped
         output: { 
             title: `Test Coverage`, 
-            summary: `Total test coverage: XX%`, 
+            summary: summary, 
             text: 'where would that text go?',
             annotations
         }
