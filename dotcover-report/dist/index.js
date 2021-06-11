@@ -6210,17 +6210,15 @@ async function run() {
     var failed = false;
     var summary = 'Total test coverage:'; // TODO + linux/windows
     
-    summary += `\n* example: 0%`;
-    
-    // path (temp/tests/cover) -> /cover-*
-    // each * is framework
-    // cover-*/cover.json -> percent
-    var filepath = path + '/cover-net462/cover.json';
-    var content = await fs.readFile(filepath, 'utf8');
-    var report = JSON.parse(reportContent);
-
-    const target = 'net462';
-    summary += `\n* ${target}: ${report.CoveragePercent}%`;
+    const fpath = process.cwd() + '/' + path;
+    const dirs = await fs.readdir(fpath);
+    for (const dir of dirs) {
+        const content = await fs.readFile(`${fpath}/${dir}/cover.json`, 'utf8');
+        const report = JSON.parse(reportContent);
+        const target = dir.substr('cover-'.length);
+        const percent = report.CoveragePercent;
+        summary += `\n* ${target}: ${percent}%`;
+    }
     
     var annotations = [];
     if (failed) {
