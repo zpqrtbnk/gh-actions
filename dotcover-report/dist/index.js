@@ -6210,14 +6210,19 @@ async function run() {
     var failed = false;
     var summary = 'Total test coverage:'; // TODO + linux/windows
     
-    const fpath = process.cwd() + '/' + path;
-    const dirs = await fs.readdir(fpath);
-    for (const dir of dirs) {
-        const content = await fs.readFile(`${fpath}/${dir}/cover.json`, 'utf8');
-        const report = JSON.parse(reportContent);
-        const target = dir.substr('cover-'.length);
-        const percent = report.CoveragePercent;
-        summary += `\n* ${target}: ${percent}%`;
+    try {
+        const fpath = process.cwd() + '/' + path;
+        const dirs = await fs.readdir(fpath);
+        for (const dir of dirs) {
+            const content = await fs.readFile(`${fpath}/${dir}/cover.json`, 'utf8');
+            const report = JSON.parse(content);
+            const target = dir.substr('cover-'.length);
+            const percent = report.CoveragePercent;
+            summary += `\n* ${target}: ${percent}%`;
+        }
+    }
+    catch (error) {
+        summary = `Failed: ${error.Message}`;
     }
     
     var annotations = [];
@@ -6241,7 +6246,7 @@ async function run() {
         //name: 'can I change the name??',
         //head_sha: ref,
         status: 'completed',
-        conclusion: 'neutral', // success, failure, neutral, cancelled, timed_out, action_required, skipped
+        conclusion: failed ? 'failure' : 'success', // success, failure, neutral, cancelled, timed_out, action_required, skipped
         output: { 
             title: `Test Coverage`, 
             summary: summary, 
