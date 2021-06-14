@@ -12,6 +12,7 @@ async function run() {
     const token = core.getInput('token', { required: true });
     const name = core.getInput('name', { required: true });
     const path = core.getInput('path', { required: true });
+    const version = core.getInput('version', { required: false });
     
     // get the REST api
     const octokit = github.getOctokit(token);
@@ -56,7 +57,9 @@ async function run() {
             const percent = report.CoveragePercent;
             summary += `\n* ${target}: ${percent}%`;
         }
-        summary += '\n\nTo view the complete code coverage report, download the corresponding artifact.';
+        var coverUrl = `http://hazelcast.github.io/hazelcast-csharp-client/${version}/cover/index.html`;
+        summary += '\n\nThe complete code coverage report has been uploaded as an artifact, ';
+        summary += `and the latest report for this version is also [available online](${coverUrl}).`;
     }
     catch (error) {
         summary = `Failed: ${error.message}`;

@@ -6,9 +6,13 @@ inputs:
     required: true
     default: 'Test Coverage'
   path:
-    description: "The path of the test coverage output."
+    description: "The path where the test coverage output has been produced."
     required: true
     default: ''
+  version:
+    description: "The client version."
+    required: false
+    default: '0.0.0-preview.0'
   token:
     description: GitHub Access Token
     required: false
