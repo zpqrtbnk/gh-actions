@@ -57,7 +57,13 @@ async function run() {
             const percent = report.CoveragePercent;
             summary += `\n* ${target}: ${percent}%`;
         }
-        var coverUrl = `http://hazelcast.github.io/hazelcast-csharp-client/${version}/cover/index.html`;
+        
+        var coverVersion = version;
+        if (version.indexOf('-') > 0) {
+            coverVersion = 'dev';
+        }
+        
+        var coverUrl = `http://hazelcast.github.io/hazelcast-csharp-client/${coverVersion}/cover/index.html`;
         summary += '\n\nThe complete code coverage report has been uploaded as an artifact, ';
         summary += `and the latest report for this version is also [available online](${coverUrl}).`;
     }
